@@ -1,0 +1,22 @@
+# Archivos de configuración sensibles
+conexion_bd.php
+
+# Vendor (dependencias de Composer)
+vendor/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Logs de PHP
+*.log
+
+# Archivos temporales
+*.tmp
+*.swp
+*~
+
+# Carpetas de IDE
+.vscode/
+.idea/
+*.code-workspace

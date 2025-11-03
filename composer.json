@@ -1,0 +1,13 @@
+{
+    "name": "aniel/lab4-login",
+    "authors": [
+        {
+            "name": "AnieLuo",
+            "email": "anie.luo@utp.ac.pa"
+        }
+    ],
+    "require": {
+        "sonata-project/google-authenticator": "^2.3",
+        "chillerlan/php-qrcode": "^5.0"
+    }
+}
