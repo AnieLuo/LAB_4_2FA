@@ -5,12 +5,14 @@
 ## 🚀 Características
 
 
-- **✅** Registro de usuarios con validación
+- **✅** Registro de usuarios
 - **✅** Inicio de sesión seguro
 - **✅** Autenticación de dos factores (2FA) con Google Authenticator
 - **✅** Generación de códigos QR
 - **✅** Registro de intentos de login
 - **✅** Diseño responsive
+- **✅** Vista de privilegios de usuarios del sistema
+- **✅** Clases de validación para sanitización y registro
 
 ## 🛠️ Tecnologías
 
@@ -80,6 +82,20 @@ CREATE TABLE intentos\_login (
   fecha TIMESTAMP DEFAULT CURRENT\_TIMESTAMP
 );
 
+CREATE USER IF NOT EXISTS 'login_app_user'@'localhost' IDENTIFIED BY 'password_seguro_123';
+GRANT SELECT, INSERT, UPDATE ON login_lab.usuarios TO 'login_app_user'@'localhost';
+GRANT SELECT, INSERT ON login_lab.intentos_login TO 'login_app_user'@'localhost';
+CREATE USER IF NOT EXISTS 'login_readonly'@'localhost' IDENTIFIED BY 'readonly_pass_456';
+GRANT SELECT ON login_lab.* TO 'login_readonly'@'localhost';
+
+FLUSH PRIVILEGES;
+
+-- COMANDO PARA VER PRIVILEGIOS:
+-- SHOW GRANTS FOR 'login_app_user'@'localhost';
+-- SHOW GRANTS FOR 'login_readonly'@'localhost';
+
+-- Ver usuarios de MySQL
+SELECT User, Host FROM mysql.user WHERE User IN ('login_app_user', 'login_readonly');
 ```
 
 ### 4. Configurar conexión
@@ -111,6 +127,8 @@ Edita `conexion\_bd.php` con tus credenciales de MySQL.
 
 5\. Acceder\: ¡Listo! Has iniciado sesión de forma segura
 
+6\. Ver\: Estos son los usuarios del sistema con sus respectivos privilegios
+
 
 
 ## 📁 Estructura del proyecto
@@ -140,6 +158,8 @@ proyecto/
 ├── seguridad.php            # Página protegida
 
 ├── logout.php               # Cerrar sesión
+
+├── mostrar_privilegios.php   # Vista
 
 ├── composer.json            # Dependencias
 
