@@ -1,0 +1,47 @@
+
+CREATE DATABASE IF NOT EXISTS login_lab CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE login_lab;
+
+CREATE TABLE usuarios (
+  id INT AUTO\_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  apellido VARCHAR(100) NOT NULL,
+  correo VARCHAR(191) NOT NULL UNIQUE,
+  HashMagic VARCHAR(255) NOT NULL,
+  sexo VARCHAR(20) NOT NULL,
+  secret\_2fa VARCHAR(255) NOT NULL,
+  fecha\_registro TIMESTAMP DEFAULT CURRENT\_TIMESTAMP,
+  activo TINYINT(1) DEFAULT 1
+);
+
+CREATE TABLE intentos\_login (
+  id INT AUTO\_INCREMENT PRIMARY KEY,
+  correo VARCHAR(100),
+  estado ENUM('exitoso','fallido') NOT NULL,
+  ip VARCHAR(45),
+  agente VARCHAR(255),
+  fecha TIMESTAMP DEFAULT CURRENT\_TIMESTAMP
+);
+
+-- Crear usuario para operaciones de lectura/escritura (para la aplicación)
+CREATE USER IF NOT EXISTS 'login_app_user'@'localhost' IDENTIFIED BY 'password_seguro_123';
+
+-- Otorgar privilegios mínimos necesarios para la aplicación
+GRANT SELECT, INSERT, UPDATE ON login_lab.usuarios TO 'login_app_user'@'localhost';
+GRANT SELECT, INSERT ON login_lab.intentos_login TO 'login_app_user'@'localhost';
+
+-- Crear usuario solo de lectura (para reportes/consultas)
+CREATE USER IF NOT EXISTS 'login_readonly'@'localhost' IDENTIFIED BY 'readonly_pass_456';
+
+-- Otorgar solo lectura
+GRANT SELECT ON login_lab.* TO 'login_readonly'@'localhost';
+
+-- Aplicar los cambios
+FLUSH PRIVILEGES;
+
+-- COMANDO PARA VER PRIVILEGIOS:
+-- SHOW GRANTS FOR 'login_app_user'@'localhost';
+-- SHOW GRANTS FOR 'login_readonly'@'localhost';
+
+-- Ver usuarios de MySQL
+SELECT User, Host FROM mysql.user WHERE User IN ('login_app_user', 'login_readonly');
